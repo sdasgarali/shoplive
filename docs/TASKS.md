@@ -27,9 +27,9 @@ Partition rule: no two agents edit the same file in the same slice. Backend = `b
 - [x] `app/seller/[id]` storefront + follow button
 - [x] `app/show/[id]` — player + ChatPanel + AuctionPanel + BuyNowRail (live WS)
 - [x] `app/cart` + `app/orders`
-- [ ] [OC] `app/seller/hub` — create show, add lots, run-auction controls
-- [x] [H] `routers/lots.py` — add auction listings to shows as ordered lots, ownership-checked + tests
+- [x] [H] `routers/lots.py` — add auction listings to shows as ordered lots, ownership-checked + 13 tests
 - [x] [OC] `app/seller/hub/page.tsx` — create show, manage status, add listings + lots, lots panel
+- [x] [SB] Integrated + verified: 43 backend tests green, `next build` clean, seller-hub API flow PASS (create→lot→go-live, ownership-guarded)
 
 ## Phase 3 — Polish & integration
 - [x] [SB] End-to-end run verified — REST + live auction WS bid PASS, `next build` clean, 32 backend tests green
