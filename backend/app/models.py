@@ -122,6 +122,18 @@ class OrderItem(SQLModel, table=True):
     qty: int = Field(default=1)
 
 
+class CartItem(SQLModel, table=True):
+    """Additive cart table (Phase 1 [H]) — cart of buy-now items + won auctions.
+
+    Unique per (user, listing); qty is adjusted on re-add.
+    """
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: int = Field(foreign_key="user.id", index=True)
+    listing_id: int = Field(foreign_key="listing.id", index=True)
+    qty: int = Field(default=1)
+    created_at: datetime = Field(default_factory=_now)
+
+
 class Follow(SQLModel, table=True):
     user_id: int = Field(primary_key=True, foreign_key="user.id")
     seller_id: int = Field(primary_key=True, foreign_key="seller.user_id")

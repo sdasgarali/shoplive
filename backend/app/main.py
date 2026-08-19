@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
 from .db import init_db
-from .routers import auth
+from .routers import auth, cart, orders
 
 
 @asynccontextmanager
@@ -31,6 +31,8 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
+app.include_router(cart.router)
+app.include_router(orders.router)
 
 
 @app.get("/health", tags=["meta"])
