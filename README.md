@@ -1,5 +1,7 @@
 # ShopLive
 
+[![CI](https://github.com/sdasgarali/shoplive/actions/workflows/ci.yml/badge.svg)](https://github.com/sdasgarali/shoplive/actions/workflows/ci.yml)
+
 An original **live-shopping marketplace** — sellers host real-time video shows, buyers bid in live auctions or buy instantly ("Buy Now"), with live chat, seller storefronts, category discovery, and a feed of live/upcoming shows.
 
 > ShopLive is an independent project inspired by the live-commerce category. It uses its own branding, copy, and assets — it is **not** affiliated with, and does not copy the content or trademarks of, any existing platform.

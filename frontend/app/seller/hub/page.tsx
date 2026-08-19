@@ -58,7 +58,7 @@ const EMPTY_LISTING_FORM: ListingForm = {
 export default function SellerHubPage() {
   const { user, token, ready } = useAuth();
   const [shows, setShows] = useState<Show[]>([]);
-  const [loadingShows, setLoadingShows] = useState(false);
+  const [loadingShows, setLoadingShows] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // create-show form
@@ -75,7 +75,6 @@ export default function SellerHubPage() {
 
   const refreshShows = useCallback(async () => {
     if (!user) return;
-    setLoadingShows(true);
     try {
       const seller = await api.getSeller(user.id);
       setShows(seller.shows);
@@ -88,8 +87,25 @@ export default function SellerHubPage() {
   }, [user]);
 
   useEffect(() => {
-    if (ready && user?.is_seller) refreshShows();
-  }, [ready, user, refreshShows]);
+    if (!ready || !user?.is_seller) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const seller = await api.getSeller(user.id);
+        if (cancelled) return;
+        setShows(seller.shows);
+        setError(null);
+      } catch (e) {
+        if (cancelled) return;
+        setError((e as Error).message);
+      } finally {
+        if (!cancelled) setLoadingShows(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [ready, user]);
 
   async function loadLots(showId: number) {
     try {
@@ -216,7 +232,6 @@ export default function SellerHubPage() {
     );
   }
 
-  const expandedShow = shows.find((s) => s.id === expandedId) ?? null;
   const expandedLots = expandedId != null ? lotsByShow[expandedId] ?? [] : [];
   const expandedListings = expandedId != null ? listingsByShow[expandedId] ?? [] : [];
   const showCreatedAuction = createdAuction && expandedId === createdAuction.showId ? createdAuction : null;
