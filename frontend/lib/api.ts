@@ -55,6 +55,28 @@ export type Order = {
   items: { listing_id: number; title: string; price: number; qty: number }[];
 };
 
+export type Lot = {
+  id: number;
+  show_id: number;
+  listing_id: number;
+  order_index: number;
+  status: "pending" | "open" | "sold" | "unsold";
+  current_bid: number;
+  current_bidder_id: number | null;
+  ends_at: string | null;
+};
+
+export type ListingPayload = {
+  title: string;
+  category: string;
+  type: "auction" | "buy_now";
+  price?: number;
+  start_price?: number;
+  increment?: number;
+  quantity?: number;
+  show_id?: number;
+};
+
 export class ApiError extends Error {
   status: number;
   constructor(status: number, message: string) {
@@ -146,4 +168,31 @@ export const api = {
 
   // orders
   myOrders: (token: string) => req<Order[]>("/orders", { headers: authHeader(token) }),
+
+  // seller hub
+  createShow: (data: { title: string; category: string; scheduled_at?: string | null }, token: string) =>
+    req<Show>("/shows", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...authHeader(token) },
+      body: JSON.stringify(data),
+    }),
+  updateShowStatus: (id: number, status: "live" | "ended", token: string) =>
+    req<Show>(`/shows/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...authHeader(token) },
+      body: JSON.stringify({ status }),
+    }),
+  createListing: (data: ListingPayload, token: string) =>
+    req<Listing>("/listings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...authHeader(token) },
+      body: JSON.stringify(data),
+    }),
+  createLot: (show_id: number, listing_id: number, token: string) =>
+    req<Lot>(`/shows/${show_id}/lots`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...authHeader(token) },
+      body: JSON.stringify({ listing_id }),
+    }),
+  listLots: (show_id: number) => req<Lot[]>(`/shows/${show_id}/lots`),
 };
