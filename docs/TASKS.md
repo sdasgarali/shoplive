@@ -36,7 +36,8 @@ Partition rule: no two agents edit the same file in the same slice. Backend = `b
 - [x] [SB] Dockerfile(s) + `docker-compose.yml` (api + web + postgres + redis), Postgres switch
 - [x] [SB] `.env.example` (all service keys incl. later Stripe/Mux/S3)
 - [ ] README run docs / demo walkthrough  (partly done)
-- [ ] [SB] CI (GitHub Actions: backend pytest + frontend build/lint)  (next)
+- [x] [H] CI (GitHub Actions: backend pytest + frontend build/lint) — GREEN on main
+- [x] [OC] ESLint flat config (next/core-web-vitals + ts) + README CI badge
 
 **MVP status: shippable.** Buyer flow works end-to-end (browse → live show → chat → bid → win/buy → cart → checkout → orders). Remaining: seller hub UI, CI, and the "later services" (real video, payments).
 
