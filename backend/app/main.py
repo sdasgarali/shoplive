@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import settings
 from .db import init_db
 from .realtime import auction, chat
-from .routers import auth, cart, listings, orders, sellers, shows
+from .routers import auth, cart, listings, lots, orders, sellers, shows
 
 
 @asynccontextmanager
@@ -37,6 +37,7 @@ app.include_router(listings.router)
 app.include_router(sellers.router)
 app.include_router(cart.router)
 app.include_router(orders.router)
+app.include_router(lots.router)
 app.include_router(chat.router)
 app.include_router(auction.router)
 
