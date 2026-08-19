@@ -10,13 +10,13 @@ Partition rule: no two agents edit the same file in the same slice. Backend = `b
 - [ ] Data model + DB + auth (JWT)  ← SB owns (hard core)
 
 ## Phase 1 — Core backend (mostly SB, with OC slices)
-- [ ] [SB] `models.py` + `db.py` + `security.py` (JWT, hashing, current-user dep)
-- [ ] [SB] `routers/auth.py` (register/login/me) + tests
+- [x] [SB] `models.py` + `db.py` + `security.py` (JWT, hashing, current-user dep)
+- [x] [SB] `routers/auth.py` (register/login/me) + tests
 - [ ] [SB] Realtime engine: `realtime/rooms.py`, `chat.py`, `auction.py` (bid validation, timer, winner) + tests
-- [ ] [OC] `routers/shows.py` — discovery feed, category filter, show CRUD (ownership-checked) + tests
-- [ ] [OC] `routers/listings.py` — listing CRUD, buy-now + tests
-- [ ] [OC] `routers/sellers.py` — storefront + follow/unfollow + tests
-- [ ] [H] `routers/cart.py` + `routers/orders.py` — cart→checkout→orders (integrates auction wins) + tests
+- [x] [OC] `routers/shows.py` — discovery feed, category filter, show CRUD (ownership-checked) + tests
+- [x] [OC] `routers/listings.py` — listing CRUD, buy-now + tests
+- [x] [OC] `routers/sellers.py` — storefront + follow/unfollow + tests
+- [x] [H] `routers/cart.py` + `routers/orders.py` — cart→checkout→orders (integrates auction wins) + tests
 - [ ] [SB] `seed.py` — demo sellers/shows/lots so the app is explorable
 
 ## Phase 2 — Frontend (OC builds components, H wires pages, SB does realtime)
