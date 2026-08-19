@@ -1,0 +1,50 @@
+# ShopLive — full stack for local/prod-like runs.
+#   docker compose up --build
+# The api switches to Postgres via DATABASE_URL; Redis is provisioned for the
+# next realtime upgrade (cross-process pub/sub). Copy .env.example -> .env first.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-shoplive}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-shoplive}
+      POSTGRES_DB: ${POSTGRES_DB:-shoplive}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-shoplive}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-shoplive}:${POSTGRES_PASSWORD:-shoplive}@db:5432/${POSTGRES_DB:-shoplive}
+      JWT_SECRET: ${JWT_SECRET:-change-me}
+      CORS_ORIGINS: http://localhost:3000,http://127.0.0.1:3000
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build: ./frontend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:

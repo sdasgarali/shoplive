@@ -7,34 +7,36 @@ Partition rule: no two agents edit the same file in the same slice. Backend = `b
 - [x] Repo `sdasgarali/shoplive` + Hermes/OpenClaw push access (deploy keys)
 - [x] Monorepo scaffold + docs (SPEC, ARCHITECTURE, TASKS)
 - [x] Backend skeleton (FastAPI app boots, `/health`) + frontend skeleton
-- [ ] Data model + DB + auth (JWT)  ← SB owns (hard core)
+- [x] [SB] Data model + DB + auth (JWT)
 
-## Phase 1 — Core backend (mostly SB, with OC slices)
+## Phase 1 — Core backend  ✅
 - [x] [SB] `models.py` + `db.py` + `security.py` (JWT, hashing, current-user dep)
 - [x] [SB] `routers/auth.py` (register/login/me) + tests
-- [ ] [SB] Realtime engine: `realtime/rooms.py`, `chat.py`, `auction.py` (bid validation, timer, winner) + tests
+- [x] [SB] Realtime engine: `realtime/rooms.py`, `chat.py`, `auction.py` (bid validation, anti-snipe timer, winner→order) + tests, WS verified live
 - [x] [OC] `routers/shows.py` — discovery feed, category filter, show CRUD (ownership-checked) + tests
 - [x] [OC] `routers/listings.py` — listing CRUD, buy-now + tests
 - [x] [OC] `routers/sellers.py` — storefront + follow/unfollow + tests
-- [x] [H] `routers/cart.py` + `routers/orders.py` — cart→checkout→orders (integrates auction wins) + tests
-- [ ] [SB] `seed.py` — demo sellers/shows/lots so the app is explorable
+- [x] [H] `routers/cart.py` + `routers/orders.py` — cart→checkout→orders + tests
+- [x] [SB] `seed.py` — demo sellers/shows/lots (1 live show w/ 3 auction lots)
 
-## Phase 2 — Frontend (OC builds components, H wires pages, SB does realtime)
-- [ ] [SB] `lib/api.ts`, `lib/ws.ts`, `lib/auth.ts` (auth context, token storage)
-- [ ] [OC] Components: `NavBar`, `ShowCard`, `LiveBadge`, `CategoryChips`, `Footer`
-- [ ] [OC] `app/page.tsx` discovery feed + `app/category/[slug]/page.tsx`
-- [ ] [OC] `app/login` + `app/signup` (calls auth API, stores token)
-- [ ] [OC] `app/seller/[id]` storefront + follow button
-- [ ] [SB] `components/ChatPanel` + `components/AuctionPanel` (WebSocket, live bids/timer)
-- [ ] [H] `app/show/[id]/page.tsx` — assemble player + ChatPanel + AuctionPanel + BuyNowRail
-- [ ] [H] `app/cart` + `app/orders`
-- [ ] [OC] `app/seller/hub` — create show, add lots, run-auction controls
+## Phase 2 — Frontend  ✅ (built by SB)
+- [x] [SB] `lib/api.ts`, `lib/ws.ts`, `lib/auth.tsx` (auth context, token storage)
+- [x] Components: `NavBar`, `ShowCard`, `ChatPanel`, `AuctionPanel`, `BuyNowRail`
+- [x] `app/page.tsx` discovery feed (live/upcoming, category + search)
+- [x] `app/login` + `app/signup` (calls auth API, stores token)
+- [x] `app/seller/[id]` storefront + follow button
+- [x] `app/show/[id]` — player + ChatPanel + AuctionPanel + BuyNowRail (live WS)
+- [x] `app/cart` + `app/orders`
+- [ ] `app/seller/hub` — create show, add lots, run-auction controls  (next: delegate to OC)
 
-## Phase 3 — Polish & integration (H + SB)
-- [ ] [H] End-to-end wire-up, fix cross-cutting bugs, run both, verify acceptance flow
-- [ ] [SB] Dockerfile(s) + `docker-compose.yml` (api + web + postgres), Postgres switch
-- [ ] [H] README run docs, seed script, demo walkthrough
-- [ ] [SB] CI (GitHub Actions: backend pytest + frontend build/lint)
+## Phase 3 — Polish & integration
+- [x] [SB] End-to-end run verified — REST + live auction WS bid PASS, `next build` clean, 32 backend tests green
+- [x] [SB] Dockerfile(s) + `docker-compose.yml` (api + web + postgres + redis), Postgres switch
+- [x] [SB] `.env.example` (all service keys incl. later Stripe/Mux/S3)
+- [ ] README run docs / demo walkthrough  (partly done)
+- [ ] [SB] CI (GitHub Actions: backend pytest + frontend build/lint)  (next)
+
+**MVP status: shippable.** Buyer flow works end-to-end (browse → live show → chat → bid → win/buy → cart → checkout → orders). Remaining: seller hub UI, CI, and the "later services" (real video, payments).
 
 ## Delegation protocol for this project
 1. **SB** posts a task package to the Workplace group tagging **@HermanoforzBot** (goal, which files, acceptance, "assign OpenClaw the [OC] items").
